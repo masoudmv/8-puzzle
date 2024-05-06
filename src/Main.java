@@ -187,14 +187,19 @@ public class Main {
         frame.add(panel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         ArrayList<PuzzlePiece> puzzlePieces = new ArrayList<>();
-        ArrayList<Integer> piecesRandomOrder = new ArrayList<>(Arrays.asList(0, 5, 6, 7, 4, 3, 2, 8, 1));
-        panel.setMissingPiece(7);
+        ArrayList<Integer> piecesRandomOrder = new ArrayList<>(Arrays.asList(7, 0, 1, 8, 3, 2, 6, 5, 4));
+
+        for (int i = 0; i < piecesRandomOrder.size(); i++)
+            if (piecesRandomOrder.get(i) == 8)
+                panel.setMissingPiece(i);
+
         boolean gameFinished = false;
         if (!solvable(panel.missingPiece, piecesRandomOrder)) {
             JOptionPane.showMessageDialog(frame, "this puzzle is not solvable, change your config and try again", "Puzzle not solvable", JOptionPane.WARNING_MESSAGE);
             gameFinished = true;
         }
         for (int i = 0; i < 9; i++) {
+            System.out.println(i + " " + piecesRandomOrder.get(i));
             if (panel.missingPiece != i) {
                 puzzlePieces.add(new PuzzlePiece(piecesRandomOrder.get(i) + 1 + ".png", new Location(panel.getHeight() / 3 * (i % 3), panel.getWidth() / 3 * (i / 3))));
             } else {

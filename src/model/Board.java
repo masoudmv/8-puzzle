@@ -2,10 +2,12 @@ package model;
 
 import controller.ConfigLoader;
 import view.MyPanel;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.*;
 
 public class Board {
-    public static Board boardInstance;
     private static final ConfigLoader configLoader =ConfigLoader.getInstance();
     public ArrayList<PuzzlePiece> puzzlePieces = new ArrayList<>();
     public int missingPiece;
@@ -36,7 +38,7 @@ public class Board {
         ArrayList<String> images = configLoader.images;
 
         for (int i = 0; i < n; i++) {
-            System.out.println(i + " " + piecesRandomOrder.get(i));
+//            System.out.println(i + " " + piecesRandomOrder.get(i));
             int panelHeight = panel.getHeight();
             int panelWidth = panel.getWidth() ;
 
@@ -50,11 +52,6 @@ public class Board {
                         new Location(panelHeight / heightTiles * (i % heightTiles), panelWidth * (i / heightTiles) / widthTiles)));
             }
         }
-    }
-
-    public static Board getInstance() {
-        if (boardInstance == null) boardInstance = new Board();
-        return boardInstance;
     }
 
     public void swapPieces(int i, int j) {
@@ -75,7 +72,6 @@ public class Board {
             if (pieceIdentifier == n-1) {
                 continue;
             }
-
             if (pieceIdentifier != i) {
                 return false;
             }
@@ -85,6 +81,66 @@ public class Board {
 
     public void setPuzzlePieces(ArrayList<PuzzlePiece> puzzlePieces) {
         this.puzzlePieces = puzzlePieces;
+    }
+
+    public void updateBoard(Point offset){
+
+        int missingPieceIndex = missingPiece;
+        if (offset.equals(new Point(1, 0))) {
+            if (missingPieceIndex % heightTiles == heightTiles-1) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex + 1);
+            setMissingPiece(missingPieceIndex + 1);
+        } else if (offset.equals(new Point(-1, 0))) {
+            if (missingPieceIndex % heightTiles == 0) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex - 1);
+            setMissingPiece(missingPieceIndex - 1);
+        } else if (offset.equals(new Point(0, -1))){
+            if (missingPieceIndex <= heightTiles-1) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex - heightTiles);
+            setMissingPiece(missingPieceIndex - heightTiles);
+        } else if (offset.equals(new Point(0, +1))) {
+            if (missingPieceIndex >= heightTiles*(widthTiles-1)) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex + heightTiles);
+            setMissingPiece(missingPieceIndex + heightTiles);
+        } else if (offset.equals(new Point(+1, -1))) {
+            if (missingPieceIndex % heightTiles == heightTiles-1 || missingPieceIndex <= heightTiles-1) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex - heightTiles+ 1);
+            setMissingPiece(missingPieceIndex - heightTiles + 1);
+
+        } else if (offset.equals(new Point(-1, -1))) {
+            if (missingPieceIndex % heightTiles == 0 || missingPieceIndex <= heightTiles-1) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex - heightTiles - 1);
+            setMissingPiece(missingPieceIndex - heightTiles - 1);
+
+        } else if (offset.equals(new Point(-1, +1))) {
+            if (missingPieceIndex % heightTiles == 0 || missingPieceIndex >= heightTiles*(widthTiles-1)) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex + heightTiles - 1);
+            setMissingPiece(missingPieceIndex + heightTiles - 1);
+
+        } else if (offset.equals(new Point(+1, +1))) {
+            if (missingPieceIndex % heightTiles == heightTiles-1 || missingPieceIndex >= heightTiles*(widthTiles-1)) {
+                return;
+            }
+            swapPieces(missingPieceIndex, missingPieceIndex + heightTiles + 1);
+            setMissingPiece(missingPieceIndex + heightTiles + 1);
+        }
+        if (gameState.equals("finished")) {
+            return;
+        }
     }
 
     public void setMissingPiece(int missingPiece) {
@@ -111,9 +167,4 @@ public class Board {
         }
         return false;
     }
-
 }
-
-
-
-

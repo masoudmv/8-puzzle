@@ -1,8 +1,8 @@
 {
 
-  "widthTiles" : 4,
+  "widthTiles" : 3,
 
-  "heightTiles" : 4,
+  "heightTiles" : 3,
 
   "initial_ordering": [0, 1, 2, 3 ,4 ,5 ,6 ,7, 8, 9, 10, 11, 12, 13, 14, 15],
 

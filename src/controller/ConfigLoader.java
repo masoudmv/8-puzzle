@@ -8,7 +8,7 @@ public class ConfigLoader {
     public int heightTiles;
     public ArrayList<String> images;
     public ArrayList<Integer> initial_ordering;
-    public boolean diagonalMovementAllowed;
+    public boolean diagonalMovementAllowed = true;
     private ConfigLoader(){}
 
     public void setWidthTiles(int widthTiles) {

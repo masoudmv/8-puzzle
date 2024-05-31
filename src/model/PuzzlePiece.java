@@ -37,6 +37,10 @@ public class PuzzlePiece {
         this.pieceNumber = pieceIdentifier;
     }
 
+    public int getPieceNumber() {
+        return pieceNumber;
+    }
+
     public void setPieceNumber(int pieceNumber) {
         this.pieceNumber = pieceNumber;
     }

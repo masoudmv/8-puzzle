@@ -2,54 +2,57 @@ package controller;
 
 import model.Board;
 import view.MyPanel;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class MyKeyListener implements KeyListener {
-    Board board = Board.getInstance();
     MyPanel myPanel = MyPanel.getInstance();
-    ConfigLoader configLoader = ConfigLoader.getInstance();
-    int widthTiles = configLoader.widthTiles;
-    int heightTiles = configLoader.heightTiles;
+    private final Set<Integer> pressedKeys = new HashSet<>();
+    private GameController gameController;
 
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {}
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-
-        int missingPieceIndex = board.missingPiece;
-        if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (missingPieceIndex % heightTiles == heightTiles-1) {
-                return;
-            }
-            board.swapPieces(missingPieceIndex, missingPieceIndex + 1);
-            board.setMissingPiece(missingPieceIndex + 1);
-        } else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
-            if (missingPieceIndex % heightTiles == 0) {
-                return;
-            }
-            board.swapPieces(missingPieceIndex, missingPieceIndex - 1);
-            board.setMissingPiece(missingPieceIndex - 1);
-        } else if (keyEvent.getKeyCode() == KeyEvent.VK_UP) {
-            if (missingPieceIndex <= heightTiles-1) {
-                return;
-            }
-            board.swapPieces(missingPieceIndex, missingPieceIndex - heightTiles);
-            board.setMissingPiece(missingPieceIndex - heightTiles);
-        } else if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
-            if (missingPieceIndex >= heightTiles*(widthTiles-1)) {
-                return;
-            }
-            board.swapPieces(missingPieceIndex, missingPieceIndex + heightTiles);
-            board.setMissingPiece(missingPieceIndex + heightTiles);
-        }
-
-        if (board.gameState.equals("finished")) {
-            return;
-        }
-        myPanel.repaint();
-
+    public MyKeyListener(GameController gameController) {
+        this.gameController = gameController;
     }
+
     @Override
-    public void keyReleased(KeyEvent keyEvent) {}
+    public synchronized void keyPressed(KeyEvent e) {
+        pressedKeys.add(e.getKeyCode());
+    }
+
+    @Override
+    public synchronized void keyReleased(KeyEvent e) {
+
+        Point offset = new Point();
+        if (!pressedKeys.isEmpty()) {
+            for (Iterator<Integer> it = pressedKeys.iterator(); it.hasNext();) {
+                switch (it.next()) {
+                    case KeyEvent.VK_W:
+                    case KeyEvent.VK_UP:
+                        offset.y = -1;
+                        break;
+                    case KeyEvent.VK_A:
+                    case KeyEvent.VK_LEFT:
+                        offset.x = -1;
+                        break;
+                    case KeyEvent.VK_S:
+                    case KeyEvent.VK_DOWN:
+                        offset.y = 1;
+                        break;
+                    case KeyEvent.VK_D:
+                    case KeyEvent.VK_RIGHT:
+                        offset.x = 1;
+                        break;
+                }
+            }
+        }
+        gameController.movePiece(offset);
+        pressedKeys.clear();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) { /* Event not used */ }
 }

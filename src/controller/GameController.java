@@ -1,15 +1,18 @@
 package controller;
 
 import model.Board;
+import view.MyCLI;
 import view.MyFrame;
 import view.MyPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class GameController {
     private Board board;
     private MyPanel panel;
     private MyFrame frame;
+    private MyCLI myCLI;
     private boolean running = true;
 
     public GameController(Board model) {
@@ -24,6 +27,8 @@ public class GameController {
         this.frame = frame;
     }
 
+    public void setMyCLI(MyCLI myCLI) { this.myCLI = myCLI; }
+
     public void startGameLoop() {
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -34,6 +39,12 @@ public class GameController {
         });
 
         while (running) {
+
+//            panel.repaint();
+//            frame.repaint();
+
+//            System.out.println(ConfigLoader.getInstance().diagonalMovementAllowed);
+
             if (board.gameFinished) {
                 break;
             }
@@ -48,20 +59,22 @@ public class GameController {
                 e.printStackTrace();
             }
             panel.repaint();
+            frame.repaint();
         }
     }
 
-    private void update() {
-
-//        System.out.println("ddsdsdsdsd");
-        // Update model state
-        // Ask view to update itself
+    protected void update() {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
 //                todo ?
                 panel.update();
+                myCLI.update();
             }
         });
+    }
+
+    public void movePiece(Point offset){
+        board.updateBoard(offset);
     }
 
     public Board getBoard() {

@@ -2,11 +2,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import controller.*;
 import model.Board;
-import view.GameView;
-import view.MyFrame;
-import view.MyPanel;
+import view.*;
 //import view.ModeSelection;
-import view.ModeSelectionPanel;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,26 +21,32 @@ public class Main {
             e.printStackTrace();
         }
 
-        Board board = Board.getInstance();
+        Board board = new Board();
 
         GameController controller = new GameController(board);
         ModeSelectionListener modeSelectionListener = new ModeSelectionListener();
 
         MyPanel panel = MyPanel.getInstance();
         ModeSelectionPanel modeSelectionPanel = ModeSelectionPanel.getInstance();
-        panel.addKeyListener(new MyKeyListener());
+        panel.addKeyListener(new MyKeyListener(controller));
 
         panel.setController(controller);
         modeSelectionPanel.setModeSelectionListener(modeSelectionListener);
+        MyCLI myCLI = new MyCLI();
+        myCLI.setController(controller);
 
         MyFrame frame = new MyFrame(panel, modeSelectionPanel);
-        GameView gameView = new GameView(frame);
+        frame.setController(controller);
+        GameView gameView = new GameView(frame, myCLI);
+
+
 
         controller.setPanel(panel);
         controller.setFrame(frame);
+        controller.setMyCLI(myCLI);
+
         modeSelectionListener.setGameView(gameView);
         modeSelectionListener.setGameController(controller);
-//        modeSelectionListener.setModeSelectionPanel(modeSelectionPanel);
 
         controller.startGameLoop();
     }

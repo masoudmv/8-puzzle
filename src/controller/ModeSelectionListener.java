@@ -46,6 +46,7 @@ public class ModeSelectionListener implements ActionListener {
                 if (selectedUI.equals("GUI")) {
                     gameView.startGUI();
                 } else if (selectedUI.equals("CLI")){
+
                     gameView.startCLI();
                 }
 

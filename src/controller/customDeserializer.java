@@ -12,11 +12,19 @@ public class customDeserializer implements JsonDeserializer<ConfigLoader> {
         JsonObject jsonObject = json.getAsJsonObject();
 
         int widthTiles = jsonObject.get("widthTiles").getAsInt();
-        int heightTiles = jsonObject.get("heightTiles").getAsInt();
-
         configLoader.setWidthTiles(widthTiles);
+
+        int heightTiles = jsonObject.get("heightTiles").getAsInt();
         configLoader.setHeightTiles(heightTiles);
 
+        boolean bool = jsonObject.get("diagonalMovementAllowed").getAsBoolean();
+        configLoader.setDiagonalMovementAllowed(bool);
+
+        int panelWidth = jsonObject.get("panelWidth").getAsInt();
+        ConfigLoader.setPanelWidth(panelWidth);
+
+        int panelHeight = jsonObject.get("panelHeight").getAsInt();
+        ConfigLoader.setPanelHeight(panelHeight);
 
         if (jsonObject.has("images")) {
             Type listType = new TypeToken<ArrayList<String>>(){}.getType();

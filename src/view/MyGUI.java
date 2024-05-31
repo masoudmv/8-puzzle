@@ -5,13 +5,13 @@ import controller.MyKeyListener;
 
 import javax.swing.*;
 
-public class MyFrame extends JFrame {
+public class MyGUI extends JFrame {
 
     private MyPanel myPanel;
     private final ModeSelectionPanel modeSelectionPanel;
     private GameController controller;
 
-    public MyFrame(MyPanel myPanel, ModeSelectionPanel modeSelectionPanel) {
+    public MyGUI(MyPanel myPanel, ModeSelectionPanel modeSelectionPanel) {
         this.myPanel = myPanel;
         this.modeSelectionPanel = modeSelectionPanel;
         this.initFrame();
@@ -23,15 +23,11 @@ public class MyFrame extends JFrame {
     }
 
     private void initFrame() {
-
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-
         // Start with mode selection panel
         initModeSelection();
-
         setVisible(true);
     }
 
@@ -43,10 +39,6 @@ public class MyFrame extends JFrame {
         pack(); // Adjust the frame size to fit the preferred size of the panel
         revalidate(); // Revalidate the frame to refresh the layout
         repaint(); // Repaint the frame to ensure proper display
-    }
-
-    public void removeSelectionModePanel(){
-        getContentPane().removeAll();
     }
 
     public void initSwingGUI() {

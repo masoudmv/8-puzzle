@@ -1,6 +1,5 @@
 package controller;
 
-import model.Board;
 import view.MyPanel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -10,7 +9,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class MyKeyListener implements KeyListener {
-    MyPanel myPanel = MyPanel.getInstance();
     private final Set<Integer> pressedKeys = new HashSet<>();
     private GameController gameController;
 
@@ -49,10 +47,10 @@ public class MyKeyListener implements KeyListener {
                 }
             }
         }
-        gameController.movePiece(offset);
+        gameController.updateBoard(offset);
         pressedKeys.clear();
     }
 
     @Override
-    public void keyTyped(KeyEvent e) { /* Event not used */ }
+    public void keyTyped(KeyEvent e) {}
 }

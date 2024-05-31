@@ -1,5 +1,6 @@
 package view;
 
+import controller.ConfigLoader;
 import controller.ModeSelectionListener;
 
 import javax.swing.*;
@@ -8,16 +9,11 @@ import java.awt.event.ActionListener;
 
 public class ModeSelectionPanel extends JPanel {
     private static ModeSelectionPanel instance;
-    private ActionListener modeSelectionListener;
-    private JRadioButton mode1Button;
-    private JRadioButton mode2Button;
-    private ButtonGroup modeGroup;
-
-    private JRadioButton ui1Button;
-    private JRadioButton ui2Button;
-    private ButtonGroup uiGroup;
-
-    private JButton startButton;
+    private final JRadioButton mode1Button;
+    private final JRadioButton mode2Button;
+    private final JRadioButton ui1Button;
+    private final JRadioButton ui2Button;
+    private final JButton startButton;
 
     public ModeSelectionPanel() {
 
@@ -35,11 +31,11 @@ public class ModeSelectionPanel extends JPanel {
         setLayout(new GridLayout(6, 1));  // 6 rows, 1 column
 
         // Create radio buttons for modes
-        mode1Button = new JRadioButton("diagonal movement allowed!");
-        mode2Button = new JRadioButton("diagonal movement forbidden!");
+        mode1Button = new JRadioButton("diagonal movement allowed! ");
+        mode2Button = new JRadioButton("diagonal movement forbidden! ");
 
         // Create a button group and add the mode radio buttons to it
-        modeGroup = new ButtonGroup();
+        ButtonGroup modeGroup = new ButtonGroup();
         modeGroup.add(mode1Button);
         modeGroup.add(mode2Button);
 
@@ -52,7 +48,7 @@ public class ModeSelectionPanel extends JPanel {
         ui2Button = new JRadioButton("CLI");
 
         // Create a button group and add the UI radio buttons to it
-        uiGroup = new ButtonGroup();
+        ButtonGroup uiGroup = new ButtonGroup();
         uiGroup.add(ui1Button);
         uiGroup.add(ui2Button);
 
@@ -65,17 +61,9 @@ public class ModeSelectionPanel extends JPanel {
         startButton.setBounds(8,20,20,20);
 
         // Set default selections
-        mode1Button.setSelected(true);
+        mode1Button.setSelected(ConfigLoader.diagonalMovementAllowed);
+        mode2Button.setSelected(!ConfigLoader.diagonalMovementAllowed);
         ui1Button.setSelected(true);
-    }
-
-    public String getSelectedMode() {
-        if (mode1Button.isSelected()) {
-            return "Mode 1";
-        } else if (mode2Button.isSelected()) {
-            return "Mode 2";
-        }
-        return null;
     }
 
     public String getSelectedUI() {
@@ -88,7 +76,6 @@ public class ModeSelectionPanel extends JPanel {
     }
 
     public void setModeSelectionListener(ActionListener modeSelectionListener) {
-        this.modeSelectionListener = modeSelectionListener;
 
         startButton.addActionListener(modeSelectionListener);
 

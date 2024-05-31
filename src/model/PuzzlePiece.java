@@ -11,7 +11,6 @@ public class PuzzlePiece {
     public Image img;
     protected int pieceNumber;
     public Location location;
-    private final ConfigLoader configLoader = ConfigLoader.getInstance();
 
     public PuzzlePiece(String imageName) {
         try {
@@ -22,7 +21,7 @@ public class PuzzlePiece {
         if (!imageName.equals("missing.jpg")) {
             pieceNumber = Integer.parseInt(imageName.substring(0, 1)) - 1;
         } else {
-            pieceNumber = configLoader.heightTiles * configLoader.widthTiles - 1;
+            pieceNumber = ConfigLoader.heightTiles * ConfigLoader.widthTiles - 1;
         }
     }
 

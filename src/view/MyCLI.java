@@ -11,9 +11,8 @@ import java.util.Scanner;
 public class MyCLI {
     private GameController controller;
     public ArrayList<PuzzlePiece> puzzlePieces = new ArrayList<>();
-    ConfigLoader configLoader = ConfigLoader.getInstance();
-    int heightTiles = configLoader.heightTiles;
-    int widthTiles = configLoader.widthTiles;
+    int heightTiles = ConfigLoader.heightTiles;
+    int widthTiles = ConfigLoader.widthTiles;
     int n = widthTiles * heightTiles;
 
     public void setController(GameController controller) {
@@ -35,7 +34,7 @@ public class MyCLI {
             else {
                 System.out.print(pieceIdentifier + "  ");
             }
-            if (i % heightTiles == 2) {
+            if (i % heightTiles == heightTiles-1) {
                 System.out.println(" ");
             }
         }
@@ -61,9 +60,19 @@ public class MyCLI {
             offset = new Point(0, -1);
         } else if (command.equals("down")){
             offset = new Point(0, +1);
+        } else if (command.equals("right-up")){
+            offset = new Point(1, -1);
+        } else if (command.equals("left-up")){
+            offset = new Point(-1, -1);
+        } else if (command.equals("right-down")){
+            offset = new Point(1, +1);
+        } else if (command.equals("left-down")){
+            offset = new Point(-1, +1);
+        } else {
+            System.out.println("Invalid input. Please try again!");
         }
 
-        controller.movePiece(offset);
+        controller.updateBoard(offset);
 
         System.out.println("=======");
         drawBoard();

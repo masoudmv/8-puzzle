@@ -3,52 +3,51 @@ import com.google.gson.GsonBuilder;
 import controller.*;
 import model.Board;
 import view.*;
-//import view.ModeSelection;
-
 import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
 
+        // Loading the config file ...
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(ConfigLoader.class, new customDeserializer());
         Gson gson = gsonBuilder.create();
-
         try (FileReader reader = new FileReader("src/controller/config.json")) {
             gson.fromJson(reader, ConfigLoader.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        MyPanel panel = MyPanel.getInstance();
         Board board = new Board();
 
-        GameController controller = new GameController(board);
+        GameController gameController = new GameController(board);
         ModeSelectionListener modeSelectionListener = new ModeSelectionListener();
 
-        MyPanel panel = MyPanel.getInstance();
         ModeSelectionPanel modeSelectionPanel = ModeSelectionPanel.getInstance();
-        panel.addKeyListener(new MyKeyListener(controller));
+        panel.addKeyListener(new MyKeyListener(gameController));
 
-        panel.setController(controller);
+        panel.setController(gameController);
         modeSelectionPanel.setModeSelectionListener(modeSelectionListener);
+
+        MyGUI myGUI = new MyGUI(panel, modeSelectionPanel);
+        myGUI.setController(gameController);
+
+
         MyCLI myCLI = new MyCLI();
-        myCLI.setController(controller);
+        myCLI.setController(gameController);
 
-        MyFrame frame = new MyFrame(panel, modeSelectionPanel);
-        frame.setController(controller);
-        GameView gameView = new GameView(frame, myCLI);
+        GameView gameView = new GameView(myGUI, myCLI);
 
-
-
-        controller.setPanel(panel);
-        controller.setFrame(frame);
-        controller.setMyCLI(myCLI);
+        gameController.setPanel(panel);
+        gameController.setFrame(myGUI);
+        gameController.setMyCLI(myCLI);
 
         modeSelectionListener.setGameView(gameView);
-        modeSelectionListener.setGameController(controller);
+        modeSelectionListener.setGameController(gameController);
 
-        controller.startGameLoop();
+        gameController.startGameLoop();
     }
 
 

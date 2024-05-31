@@ -7,12 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-
 public class MyPanel extends JPanel {
-    private static GameController controller;
+    private static GameController gameController;
     private static MyPanel instance;
     public ArrayList<PuzzlePiece> puzzlePieces = new ArrayList<>();
-    ConfigLoader configLoader = ConfigLoader.getInstance();
 
     private MyPanel() {
         int screenWidth;
@@ -22,12 +20,6 @@ public class MyPanel extends JPanel {
         int maxSize = Math.max(screenWidth, screenHeight) / 3;
         setSize(maxSize, maxSize);
         setLocation(screenWidth / 2 - maxSize / 2,screenHeight / 2 - maxSize / 2);
-
-//        addKeyListener(new MyKeyListener());
-    }
-
-    public void setPuzzlePieces(ArrayList<PuzzlePiece> puzzlePieces) {
-        this.puzzlePieces = puzzlePieces;
     }
 
     public static MyPanel getInstance() {
@@ -36,21 +28,22 @@ public class MyPanel extends JPanel {
     }
 
     public void setController(GameController controller) {
-        MyPanel.controller = controller;
+        MyPanel.gameController = controller;
     }
 
     public void update(){
-        this.puzzlePieces = controller.getBoard().puzzlePieces;
+        this.puzzlePieces = gameController.getBoard().puzzlePieces;
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (PuzzlePiece piece : puzzlePieces) {
-            g.drawImage(piece.img, piece.location.x, piece.location.y, (int) this.getSize().getWidth() / configLoader.heightTiles, (int) this.getSize().getHeight() / configLoader.widthTiles, null);
+            g.drawImage(    piece.img,
+                            piece.location.x,
+                            piece.location.y, (int) this.getSize().getWidth() / ConfigLoader.heightTiles,
+                        (int) this.getSize().getHeight() / ConfigLoader.widthTiles, null
+            );
         }
     }
-
-
 }
